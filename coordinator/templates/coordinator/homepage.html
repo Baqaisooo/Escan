@@ -1,0 +1,397 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+	المنسق - الصفحة الرئيسية
+{% endblock title %}
+	
+
+{% block cssFiles %}
+	<link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css" integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">	
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/table_main.css' %}">
+{% endblock cssFiles %}
+	
+
+{% block content %}
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" dir="rtl">
+		<a class="navbar-brand" href="#">
+			<img width="200px" src="{% static 'images/Esnad_logo.png' %}" alt="">
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	
+		<div class="collapse navbar-collapse" id="navbarColor02">
+		  <ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+			  <a class="nav-link" > <span class="sr-only"></span></a>
+			</li>
+			<li class="nav-item m-l-200">
+				<h2 class="text-white">المنسق - <span class="h4">{{ user.get_full_name }}</span></h2>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" ></a>
+			</li>
+			<li class="nav-item">
+			  	<a href="{% url 'Account:logout' %}" class="nav-link text-white btn btn-outline-danger">تسجيل الخروج</a>
+			</li>
+		  </ul>
+		  
+			<a class="btn btn-primary my-2 my-sm-0 font-weight-bold" href="{% url 'Coordinator:new_case' %}">+ إنشاء معاملة جديدة</a>
+		</div>
+	</nav>
+	<div class="container-fluid">
+		<dev class="m-t-10 m-b-10">
+			{% for message in messages %}
+				<h3>{{ message }}</h3>
+			{% endfor %}
+		</dev>
+		<div class="limiter">
+			<div class="container-table100">
+				<div class="wrap-table100">
+					<button 
+						type="button" 
+						class="btn btn-danger"
+						style="cursor: default;">
+						معاملات مرسلة للمعاينة <span class="badge badge-light">{{sent_cases|length}}</span>
+					</button>        
+					<div class="table100 ver1 m-b-50  text-center">
+						<div class="table100-head">
+							<table>
+								<thead>
+									<tr class="row100 head">
+										<th class="cell100 column-100">تاريخ المعاملة</th>
+										<th class="cell100 column-100">رقم المعاملة</th>
+										<th class="cell100 column-100">اسم المالك</th>
+										<th class="cell100 column-100">المدينة</th>
+										<th class="cell100 column-100">الحي</th>
+										<th class="cell100 column-100">المعاين</th>
+										<th class="cell100 column-100">الفترة</th>
+										<th class="cell100 column-100">الملاحظات</th>
+										<th class="cell100 column-100">خيارات</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+						<div class="table100-body js-pscroll">
+							<table class="text-center">
+								<tbody>
+									
+									{% for case in sent_cases %}
+										<tr class="row100 body-1">
+											<td class="cell100 column-100">{{case.case.created_at.date|date:"c"}}</td>
+											<td class="cell100 column-100">{{case.case.id}}</td>
+											<td class="cell100 column-100 h2">{{case.case.realEstate.owner_name}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.city_id.city}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.neighborhood_id.neighborhood_name}}</td>
+											<td class="cell100 column-100">{{case.case.get_the_inspector}}</td>
+											<td class="cell100 column-100" dir="ltr">{{case.case.created_at|timesince}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.coordinator_note}}</td>
+											<td class="cell100 column-100"><a href="{% url 'Coordinator:coordinatorUpdateCase' case.case.pk %}" class="btn btn-success">عرض و تحرير</a></td>
+										</tr>
+										<!-- <tr class="row100 body-2">
+											<td class="cell100 column-100">27/12/2019</td>
+										</tr> -->
+									{% endfor %}
+										
+									
+
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
+					<button 
+						type="button" 
+						class="btn btn-danger"
+						style="cursor: default;">
+						معاملات تم إعتذار قبولها <span class="badge badge-light">{{apologized_cases|length}}</span>
+					</button>        
+					<div class="table100 ver1 m-b-50  text-center">
+						<div class="table100-head">
+							<table>
+								<thead>
+									<tr class="row100 head">
+										<th class="cell100 column-100">تاريخ المعاملة</th>
+										<th class="cell100 column-100">رقم المعاملة</th>
+										<th class="cell100 column-100">اسم المالك</th>
+										<th class="cell100 column-100">المدينة</th>
+										<th class="cell100 column-100">الحي</th>
+										<th class="cell100 column-100">المعاين</th>
+										<th class="cell100 column-100">الفترة</th>
+										<th class="cell100 column-100">الملاحظات</th>
+										<th class="cell100 column-100">خيارات</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+						<div class="table100-body js-pscroll">
+							<table>
+								<tbody>
+									{% for case in apologized_cases %}
+										<tr class="row100 body-1">
+											<td class="cell100 column-100">{{case.case.created_at.date|date:"c"}}</td>
+											<td class="cell100 column-100">{{case.case.id}}</td>
+											<td class="cell100 column-100 h2">{{case.case.realEstate.owner_name}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.city_id.city}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.neighborhood_id.neighborhood_name}}</td>
+											<td class="cell100 column-100">{{case.case.get_the_inspector}}</td>
+											<td class="cell100 column-100" dir="ltr">{{case.case.created_at|timesince}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.coordinator_note}}</td>
+											<td class="cell100 column-100"><a href="{% url 'Coordinator:coordinatorUpdateCase' case.case.pk %}" class="btn btn-success">عرض و تحرير</a></td>
+										</tr>
+										<!-- <tr class="row100 body-2">
+											<td class="cell100 column-100">27/12/2019</td>
+										</tr> -->
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+
+					<button 
+						type="button" 
+						class="btn btn-danger"
+						style="cursor: default;">
+						المعاملات المعلقة <span class="badge badge-light">{{held_cases|length}}</span>
+					</button>        
+					<div class="table100 ver1 m-b-50  text-center">
+						<div class="table100-head">
+							<table>
+								<thead>
+									<tr class="row100 head">
+										<th class="cell100 column-100">تاريخ المعاملة</th>
+										<th class="cell100 column-100">رقم المعاملة</th>
+										<th class="cell100 column-100">اسم المالك</th>
+										<th class="cell100 column-100">المدينة</th>
+										<th class="cell100 column-100">الحي</th>
+										<th class="cell100 column-100">المعاين</th>
+										<th class="cell100 column-100">الفترة</th>
+										<th class="cell100 column-100">الملاحظات</th>
+										<th class="cell100 column-100">خيارات</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+						<div class="table100-body js-pscroll">
+							<table>
+								<tbody>
+									{% for case in held_cases %}
+										<tr class="row100 body-1">
+											<td class="cell100 column-100">{{case.case.created_at.date|date:"c"}}</td>
+											<td class="cell100 column-100">{{case.case.id}}</td>
+											<td class="cell100 column-100 h2">{{case.case.realEstate.owner_name}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.city_id.city}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.neighborhood_id.neighborhood_name}}</td>
+											<td class="cell100 column-100">{{case.case.get_the_inspector}}</td>
+											<td class="cell100 column-100" dir="ltr">{{case.case.created_at|timesince}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.coordinator_note}}</td>
+											<td class="cell100 column-100"><a href="{% url 'Coordinator:coordinatorUpdateCase' case.case.pk %}" class="btn btn-success">عرض و تحرير</a></td>
+										</tr>
+										<!-- <tr class="row100 body-2">
+											<td class="cell100 column-100">27/12/2019</td>
+										</tr> -->
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
+
+					<button 
+						type="button" 
+						class="btn btn-danger"
+						style="cursor: default;">
+						معاملات في انتظار موعد المعاينة <span class="badge badge-light">{{waiting_time_cases|length}}</span>
+					</button>        
+					<div class="table100 ver1 m-b-50  text-center">
+						<div class="table100-head">
+							<table>
+								<thead>
+									<tr class="row100 head">
+										<th class="cell100 column-100">تاريخ المعاملة</th>
+										<th class="cell100 column-100">رقم المعاملة</th>
+										<th class="cell100 column-100">اسم المالك</th>
+										<th class="cell100 column-100">المدينة</th>
+										<th class="cell100 column-100">الحي</th>
+										<th class="cell100 column-100">المعاين</th>
+										<th class="cell100 column-100">الفترة</th>
+										<th class="cell100 column-100">الملاحظات</th>
+										<th class="cell100 column-100">خيارات</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+						<div class="table100-body js-pscroll">
+							<table>
+								<tbody>
+									{% for case in waiting_time_cases %}
+										<tr class="row100 body-1">
+											<td class="cell100 column-100">{{case.case.created_at.date|date:"c"}}</td>
+											<td class="cell100 column-100">{{case.case.id}}</td>
+											<td class="cell100 column-100 h2">{{case.case.realEstate.owner_name}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.city_id.city}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.neighborhood_id.neighborhood_name}}</td>
+											<td class="cell100 column-100">{{case.case.get_the_inspector}}</td>
+											<td class="cell100 column-100" dir="ltr">{{case.case.created_at|timesince}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.coordinator_note}}</td>
+											<td class="cell100 column-100"><a href="{% url 'Coordinator:coordinatorUpdateCase' case.case.pk %}" class="btn btn-success">عرض و تحرير</a></td>
+										</tr>
+										<!-- <tr class="row100 body-2">
+											<td class="cell100 column-100">27/12/2019</td>
+										</tr> -->
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
+
+					<button 
+						type="button" 
+						class="btn btn-danger"
+						style="cursor: default;">
+						معاملات تم تحديد موعد معاينتها  <span class="badge badge-light">{{waiting_inspect_cases|length}}</span>
+					</button>        
+					<div class="table100 ver1 m-b-50  text-center">
+						<div class="table100-head">
+							<table>
+								<thead>
+									<tr class="row100 head">
+										<th class="cell100 column-100">تاريخ المعاملة</th>
+										<th class="cell100 column-100">رقم المعاملة</th>
+										<th class="cell100 column-100">اسم المالك</th>
+										<th class="cell100 column-100">المدينة</th>
+										<th class="cell100 column-100">الحي</th>
+										<th class="cell100 column-100">المعاين</th>
+										<th class="cell100 column-100">الفترة</th>
+										<th class="cell100 column-100">الملاحظات</th>
+										<th class="cell100 column-100">خيارات</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+						<div class="table100-body js-pscroll">
+							<table>
+								<tbody>
+									{% for case in waiting_inspect_cases %}
+										<tr class="row100 body-1">
+											<td class="cell100 column-100">{{case.case.created_at.date|date:"c"}}</td>
+											<td class="cell100 column-100">{{case.case.id}}</td>
+											<td class="cell100 column-100 h2">{{case.case.realEstate.owner_name}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.city_id.city}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.neighborhood_id.neighborhood_name}}</td>
+											<td class="cell100 column-100">{{case.case.get_the_inspector}}</td>
+											<td class="cell100 column-100" dir="ltr">{{case.case.created_at|timesince}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.coordinator_note}}</td>
+											<td class="cell100 column-100"><a href="{% url 'Coordinator:coordinatorUpdateCase' case.case.pk %}" class="btn btn-success">عرض و تحرير</a></td>
+										</tr>
+										<!-- <tr class="row100 body-2">
+											<td class="cell100 column-100">27/12/2019</td>
+										</tr> -->
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
+
+					<button 
+						type="button" 
+						class="btn btn-danger"
+						style="cursor: default;">
+						معاملات تم تأجيل موعد معاينتها  <span class="badge badge-light">{{delay_cases|length}}</span>
+					</button>        
+					<div class="table100 ver1 m-b-50  text-center">
+						<div class="table100-head">
+							<table>
+								<thead>
+									<tr class="row100 head">
+										<th class="cell100 column-100">تاريخ المعاملة</th>
+										<th class="cell100 column-100">رقم المعاملة</th>
+										<th class="cell100 column-100">اسم المالك</th>
+										<th class="cell100 column-100">المدينة</th>
+										<th class="cell100 column-100">الحي</th>
+										<th class="cell100 column-100">المعاين</th>
+										<th class="cell100 column-100">الفترة</th>
+										<th class="cell100 column-100">الملاحظات</th>
+										<th class="cell100 column-100">خيارات</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+						<div class="table100-body js-pscroll">
+							<table>
+								<tbody>
+									{% for case in delay_cases %}
+										<tr class="row100 body-1">
+											<td class="cell100 column-100">{{case.case.created_at.date|date:"c"}}</td>
+											<td class="cell100 column-100">{{case.case.id}}</td>
+											<td class="cell100 column-100 h2">{{case.case.realEstate.owner_name}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.city_id.city}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.neighborhood_id.neighborhood_name}}</td>
+											<td class="cell100 column-100">{{case.case.get_the_inspector}}</td>
+											<td class="cell100 column-100" dir="ltr">{{case.case.created_at|timesince}}</td>
+											<td class="cell100 column-100">{{case.case.realEstate.coordinator_note}}</td>
+											<td class="cell100 column-100"><a href="{% url 'Coordinator:coordinatorUpdateCase' case.case.pk %}" class="btn btn-success">عرض و تحرير</a></td>
+										</tr>
+										<!-- <tr class="row100 body-2">
+											<td class="cell100 column-100">27/12/2019</td>
+										</tr> -->
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+
+				</div>
+			</div>
+		</div>
+	
+
+
+
+
+
+	</div>
+		
+{% endblock content %}
+	
+		
+		
+
+{% block jsFiles %}
+	<script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js" integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous"></script>
+	<!--===============================================================================================-->
+	<script src="{% static 'vendor/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			var ps = new PerfectScrollbar(this);
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+			
+		
+	</script>
+<!--===============================================================================================-->
+	<script src="{% static 'js/table_main.js' %}"></script>
+{% endblock jsFiles %}

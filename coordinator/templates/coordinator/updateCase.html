@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+	المنسق - الصفحة الرئيسية
+{% endblock title %}
+	
+
+{% block cssFiles %}
+	<link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css" integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">	
+	<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+{% endblock cssFiles %}
+
+
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" dir="rtl">
+    <a class="navbar-brand" href="{% url 'Coordinator:homepage' %}">
+        <img width="200px" src="{% static 'images/Esnad_logo.png' %}" alt="">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" > <span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item m-l-200">
+            <h2 class="text-white">المنسق - <span class="h4">{{ user.get_full_name }}</span></h2>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ></a>
+        </li>
+        <li class="nav-item">
+              <a href="{% url 'Account:logout' %}" class="nav-link text-white btn btn-outline-danger">تسجيل الخروج</a>
+        </li>
+      </ul>
+      
+        <a class="btn btn-primary my-2 my-sm-0 font-weight-bold" href="{% url 'Coordinator:new_case' %}">+ إنشاء معاملة جديدة</a>
+    </div>
+</nav>
+<div class="container" style="font-family: cursive;">
+        
+    
+    <div class="row justify-content-center m-b-50">
+        <div class="col-8">
+          <!--==============================Alert Messages=================================-->
+
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <div class="container-fluid" id='alert' data-appear-animation="fadeInDown" data-appear-animation-delay="1150">
+                        <br/>
+                        <div class="alert center {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <br>
+
+            <h1 class="mt-2">تعديل المعاملة رقم {{case_ID}}</h1>
+            <hr class="mt-0 mb-4">
+            
+            <form method="post" style="direction: rtl;" id="caseForm"  enctype="multipart/form-data" data-cities-url="{% url 'Coordinator:ajax_load_cities' %}" data-neighborhoods-url="{% url 'Coordinator:ajax_load_neighborhoods' %}" data-inspector-url="{% url 'Coordinator:ajax_load_inspectors' %}">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-6">
+                      {{ form.contact_name|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                      {{ form.contact_number|as_crispy_field }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-4">
+                      {{ form.region_id|as_crispy_field }}
+                    </div>
+                    <div class="col-4">
+                      {{ form.city_id|as_crispy_field }}
+                    </div>
+                    <div class="col-4">
+                      {{ form.neighborhood_id|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                      {{ form.location|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                      {{ form.inspector|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                      {{ form.coordinator_note|as_crispy_field }}
+                    </div>
+                    <div class="col-7" id="fileCollection">
+                      <div class="m-b-50">
+                        <button class="btn btn-primary" style="float: left;" id="add">إضافة +</button>
+                          <h5 style="float: right;">
+                            إضافة الملفات
+                          </h5>
+                      </div>
+                      <div class="row">
+                        <div class="col-6 of-hidden">
+                            <input type="file" name="docs" id="docs-1" required>
+                        </div>
+                        <div class="col-4">
+                          <select class="select form-control" name="file-type" id="file-type-1" required>
+                            <option value="1">صك</option>
+                            <option value="2">رخصة</option>
+                            <option value="3">كروكي</option>
+                            <option value="4">اخرى</option>
+                          </select>
+                        </div>
+                        <div class="col-2">
+                          <button class="btn btn-danger h1">X</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+               
+
+                <a href="{% url 'Coordinator:homepage' %}">العودة للصفحة الرئيسية</a>    
+                <button type="submit" class="btn btn-success">إرسال</button>
+            </form>
+            
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+ 
+{% block jsFiles %}
+        
+<script>
+  $("#id_region_id").change(function () {
+    var url = $("#caseForm").attr("data-cities-url");  
+    var region = $(this).val(); 
+
+    $.ajax({                     
+      url: url,                  
+      data: {
+        'region': region 
+      },
+      success: function (data) {  
+        $("#id_city_id").html(data); 
+        $("#id_neighborhood_id").html("<option value=''>----555-----</option>");  
+        $("#id_inspector").html("<option value=''>---------</option>");  
+
+      }
+    });
+
+  });
+</script>
+
+<script>
+    $("#id_city_id").change(function () {
+      var url = $("#caseForm").attr("data-neighborhoods-url"); 
+      var city = $(this).val();  
+      
+      $.ajax({             
+        url: url,      
+        data: {
+          'city': city   
+        },
+        success: function (data) {   
+          url = $("#caseForm").attr("data-inspector-url"); 
+          $("#id_neighborhood_id").html(data);  
+          $.ajax({             
+            url: url,      
+            data: {
+              'city': city   
+            },
+            success: function (data) {   
+              $("#id_inspector").html(data);  
+          }
+          });  
+      }
+      });
+      
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      var i = 1;
+      $('#add').click(function () {
+        i++;
+        $('#fileCollection').append('<div class="row" id=row'+i+'><div class="col-6 of-hidden"><input type="file" name="docs" id="docs-1" required></div><div class="col-4"><select class="select form-control" name="file-type" id="file-type-'+i+'" required><option value="1">صك</option><option value="2">رخصة</option><option value="3">كروكي</option><option value="4">اخرى</option></select></div><div class="col-2"><button name="remove" id='+i+' class="btn btn-danger btn-remove h1">X</button></div></div>')
+      })
+    })
+
+    $(document).on('click', '.btn-remove', function () {
+      var button_id = $(this).attr("id");
+      $('#row'+button_id+'').remove();
+    })
+  </script>
+
+{% endblock jsFiles %}

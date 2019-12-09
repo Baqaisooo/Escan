@@ -1,0 +1,70 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar">
+	<head>
+		<title>
+            {% block title %}
+                إسناد
+            {% endblock title %}
+        </title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!--===============================================================================================-->	
+		<link rel="icon" type="image/png" href="{% static 'images/E_logo.ico' %}">
+		<!--===============================================================================================-->
+		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+		<link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
+		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
+		<!--===============================================================================================-->	
+		<link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
+		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
+		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="{% static 'vendor/perfect-scrollbar/perfect-scrollbar.css' %}">
+
+        
+        {% block cssFiles %}
+            
+		{% endblock cssFiles %}
+		
+		
+		{% block style %}
+			
+		{% endblock style %}
+			
+            
+
+    </head>
+	<body>
+		
+		
+        {% block content %}
+            
+        {% endblock content %}
+            
+		
+
+		
+	<!--===============================================================================================-->	
+		<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+	<!--===============================================================================================-->
+		<script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+		<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+	<!--===============================================================================================-->
+		<script src="{% static 'vendor/select2/select2.min.js' %}"></script>
+	<!--===============================================================================================-->
+
+    
+    {% block jsFiles %}
+        
+    {% endblock jsFiles %}
+        
+	</body>
+</html>

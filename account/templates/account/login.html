@@ -1,0 +1,82 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+	تسجيل الدخول
+{% endblock title %}
+	
+
+{% block cssFiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+{% endblock cssFiles %}
+	
+
+{% block content %}
+	<div class="limiter" dir="rtl"> 
+		<div class="container-login100" style="background-image: url({% static 'images/background.jpg'%})">
+			
+			<div class="wrap-login100 p-t-90 p-b-30">
+
+				<form class="login100-form validate-form" action="{% url 'Account:login' %}" method="POST">
+					<div class="login100-form-avatar">
+						<img src="{% static 'images/Esnad_logo.png' %}" alt="AVATAR">
+					</div>
+
+					<span class="login100-form-title p-t-20 p-b-45 h1 text-white font-weight-bold">
+						تسجيل الدخول
+					</span>
+					{% csrf_token %}
+					<div>
+						{% for message in messages %}
+							<div class="alert alert-danger alert-dismissible fade show" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								{{ message }}
+							</div>	
+						{% endfor %}
+							
+					</div>
+					<div class="wrap-input100 validate-input m-b-10" data-validate = "يجب إدخال اسم مستخدم صحيح">
+						<input class="input100" type="username" name="username" placeholder="اسم المستخدم" required>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-user"></i>
+						</span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-10" data-validate = "كلمة المرور مطلوبة">
+						<input class="input100" type="password" name="password" placeholder="كلمة المرور" required>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock"></i>
+						</span>
+					</div>
+
+					<div class="container-login100-form-btn p-t-10 ">
+						<button class="login100-form-btn font-weight-bold" type="submit" >
+							تسجيل الدخول
+						</button>
+						
+					</div>
+					<!-- <div class="text-center w-full p-t-25">
+						<a href="#" class="txt1">
+							نسيت كلمة المرور ؟
+						</a>
+					</div> -->
+
+				</form>
+			</div>
+		</div>
+	</div>	
+{% endblock content %}
+	
+		
+		
+
+{% block jsFiles %}
+	<script src="{% static 'js/main.js' %}"></script>
+{% endblock jsFiles %}
